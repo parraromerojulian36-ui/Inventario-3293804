@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CategoriaConfig(AppConfig):
+class GestionVentasConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'categoria'
+    name = 'Gestion_Ventas'
