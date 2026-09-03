@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'Gestion_Inventario',
     'Gestion_Ventas',
-    'Usuarios',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
