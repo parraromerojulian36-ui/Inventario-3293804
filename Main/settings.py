@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # local
     'Gestion_Inventario',
     'Gestion_Ventas',
-    'Usuarios',
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'Main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
