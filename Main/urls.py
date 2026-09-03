@@ -10,7 +10,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('inventario/', include('Gestion_Inventario.urls')),
+    path('Inventario/', include('Gestion_Inventario.urls')),
     path('ventas/', include('Gestion_Ventas.urls')),
     path('usuarios/', include('Usuarios.urls')),
     path()
