@@ -4,20 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datos de la Empresa</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        .form-label-custom {
-            color: #495057;
-            font-weight: 500;
-        }
-        .help-text {
-            font-size: 0.85rem;
-            color: #6c757d;
-        }
-    </style>
 </head>
 <body class="bg-light py-4">
 
@@ -32,13 +20,31 @@
             <label class="col-md-3 form-label-custom">Tipo razón social</label>
             <div class="col-md-9">
                 <div class="form-check form-check-inline me-4">
-                    <input class="form-check-input" type="radio" name="tipo_razon_social" id="persona" value="persona">
+                    <input class="form-check-input" type="radio" name="tipo_razon_social" id="persona" value="persona" {% if empresa.tipo_razon_social == 'persona' %}checked{% endif %}>
                     <label class="form-check-label" for="persona">Es persona</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="tipo_razon_social" id="empresa" value="empresa" checked>
+                    <input class="form-check-input" type="radio" name="tipo_razon_social" id="empresa" value="empresa" {% if empresa.tipo_razon_social == 'empresa' or not empresa.tipo_razon_social %}checked{% endif %}>
                     <label class="form-check-label" for="empresa">Empresa</label>
                 </div>
+            </div>
+        </div>
+        <!-- Tipo de Comercio (Menú desplegable) -->
+        <div class="row mb-3">
+            <label for="tipo_comercio" class="col-md-3 form-label-custom col-form-label">Tipo de Comercio</label>
+            <div class="col-md-9">
+                <select class="form-select" id="tipo_comercio" name="tipo_comercio">
+                    <option value="" {% if not empresa.tipo_comercio %}selected{% endif %}>-- Seleccionar Comercio --</option>
+                    <option value="Supermercado" {% if empresa.tipo_comercio == 'Supermercado' %}selected{% endif %}>Supermercado</option>
+                    <option value="Farmacia" {% if empresa.tipo_comercio == 'Farmacia' %}selected{% endif %}>Farmacia</option>
+                    <option value="Ropa" {% if empresa.tipo_comercio == 'Ropa' %}selected{% endif %}>Ropa</option>
+                    <option value="Ferreteria" {% if empresa.tipo_comercio == 'Ferreteria' %}selected{% endif %}>Ferretería</option>
+                    <option value="Tecnologia" {% if empresa.tipo_comercio == 'Tecnologia' %}selected{% endif %}>Tecnología</option>
+                    <option value="Restaurante" {% if empresa.tipo_comercio == 'Restaurante' %}selected{% endif %}>Restaurante</option>
+                    <option value="Agropecuario" {% if empresa.tipo_comercio == 'Agropecuario' %}selected{% endif %}>Agropecuario</option>
+                    <option value="Taller Mecanico" {% if empresa.tipo_comercio == 'Taller Mecanico' %}selected{% endif %}>Taller Mecánico</option>
+                    <option value="Insumos Limpieza" {% if empresa.tipo_comercio == 'Insumos Limpieza' %}selected{% endif %}>Insumos Limpieza</option>
+                </select>
             </div>
         </div>
 
@@ -46,8 +52,7 @@
         <div class="row mb-3">
             <label for="razon_social" class="col-md-3 form-label-custom col-form-label">Razón social</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" id="razon_social" name="razon_social" placeholder="Nombre de la empresa" required>
-                <div class="help-text mt-1">Debe coincidir con la registrada en el RUT, para evitar rechazos en documentos electrónicos.</div>
+                <input type="text" class="form-control" id="razon_social" name="razon_social" value="{{ empresa.razon_social|default:'' }}" required>
             </div>
         </div>
 
@@ -55,20 +60,19 @@
         <div class="row mb-3">
             <label for="serial" class="col-md-3 form-label-custom col-form-label">Serial</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" id="serial" name="serial" placeholder="Serial de la empresa" required>
+                <input type="text" class="form-control" id="serial" name="serial" value="{{ empresa.serial|default:'' }}" required>
             </div>
         </div>
 
         <!-- Tipo Identificación -->
         <div class="row mb-3">
             <label for="tipo_identificacion" class="col-md-3 form-label-custom col-form-label">Tipo Identificación</label>
-            <div class="col-md-9 d-flex align-items-center">
+            <div class="col-md-9">
                 <select class="form-select" id="tipo_identificacion" name="tipo_identificacion">
-                    <option value="NIT">NIT</option>
-                    <option value="CC">Cédula de Ciudadanía</option>
-                    <option value="CE">Cédula de Extranjería</option>
+                    <option value="NIT" {% if empresa.tipo_identificacion == 'NIT' %}selected{% endif %}>NIT</option>
+                    <option value="CC" {% if empresa.tipo_identificacion == 'CC' %}selected{% endif %}>Cédula de Ciudadanía</option>
+                    <option value="CE" {% if empresa.tipo_identificacion == 'CE' %}selected{% endif %}>Cédula de Extranjería</option>
                 </select>
-                <i class="bi bi-info-circle text-secondary ms-2" title="Tipo de documento fiscal"></i>
             </div>
         </div>
 
@@ -76,12 +80,11 @@
         <div class="row mb-3">
             <label for="identificacion" class="col-md-3 form-label-custom col-form-label">Identificación</label>
             <div class="col-md-5 mb-2 mb-md-0">
-                <input type="text" class="form-control bg-light" id="identificacion" name="identificacion" placeholder="Número de identificación" required>
+                <input type="text" class="form-control bg-light" id="identificacion" name="identificacion" value="{{ empresa.identificacion|default:'' }}" required>
             </div>
             <label for="dv" class="col-md-2 form-label-custom col-form-label text-md-end">Dígito Verificación</label>
-            <div class="col-md-2 d-flex align-items-center">
-                <input type="text" class="form-control bg-light text-center" id="dv" name="dv" placeholder="Dígito" maxlength="1">
-                <i class="bi bi-info-circle text-secondary ms-2" title="Dígito de verificación del NIT"></i>
+            <div class="col-md-2">
+                <input type="text" class="form-control bg-light text-center" id="dv" name="dv" value="{{ empresa.digito_verificacion|default:'' }}" maxlength="1">
             </div>
         </div>
 
@@ -91,7 +94,7 @@
         <div class="row mb-3">
             <label for="correo" class="col-md-3 form-label-custom col-form-label">Correo Electrónico</label>
             <div class="col-md-9">
-                <input type="email" class="form-control" id="correo" name="correo" placeholder="contacto@empresa.com" required>
+                <input type="email" class="form-control" id="correo" name="correo" value="{{ empresa.correo|default:'' }}" required>
             </div>
         </div>
 
@@ -99,7 +102,7 @@
         <div class="row mb-3">
             <label for="direccion" class="col-md-3 form-label-custom col-form-label">Dirección</label>
             <div class="col-md-9">
-                <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Calle / Carrera # No.">
+                <input type="text" class="form-control" id="direccion" name="direccion" value="{{ empresa.direccion|default:'' }}">
             </div>
         </div>
 
@@ -107,7 +110,7 @@
         <div class="row mb-4">
             <label for="contacto" class="col-md-3 form-label-custom col-form-label">Contacto (Teléfono)</label>
             <div class="col-md-9">
-                <input type="tel" class="form-control" id="contacto" name="contacto" placeholder="+57 300 000 0000">
+                <input type="tel" class="form-control" id="contacto" name="contacto" value="{{ empresa.contacto|default:'' }}">
             </div>
         </div>
 
@@ -117,7 +120,7 @@
                 <button type="submit" class="btn btn-primary px-4">
                     <i class="bi bi-save me-1"></i> Guardar
                 </button>
-                <a href="javascript:history.back()" class="btn btn-outline-secondary px-4">
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary px-4">
                     <i class="bi bi-arrow-left me-1"></i> Volver
                 </a>
             </div>
