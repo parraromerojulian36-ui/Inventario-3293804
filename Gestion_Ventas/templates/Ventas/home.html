@@ -1,11 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestion de Ventas - SIGI</title>
 </head>
 <body>
-    
+
+<div class="container mt-4">
+    <h2 class="mb-3"><i class="bi bi-cart-check"></i> Registrar Nueva Venta</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="card shadow-sm p-4">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label font-weight-bold">Seleccionar Producto</label>
+                    <select name="producto_id" class="form-select" required>
+                        <option value="">-- Buscar producto --</option>
+                        {% for prod in productos %}
+                        <option value="{{ prod.id }}">
+                            {{ prod.nombre_producto }} | Stock: {{ prod.stock_actual }} | ${{ prod.precio_venta }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Cantidad</label>
+                    <input type="number" name="cantidad" class="form-control" value="1" min="1" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Método de Pago</label>
+                    <select name="metodo_pago" class="form-select">
+                        <option value="EFECTIVO">Efectivo</option>
+                        <option value="TARJETA">Tarjeta</option>
+                        <option value="TRANSFERENCIA">Transferencia / PSE</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del Cliente</label>
+                    <input type="text" name="cliente_nombre" class="form-control" placeholder="Cliente General">
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check-circle"></i> Procesar Venta y Descargar Stock
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
