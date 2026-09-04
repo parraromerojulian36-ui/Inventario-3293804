@@ -1,3 +1,11 @@
 from django.contrib import admin
+from .models import Venta, DetalleVenta
 
-# Register your models here.
+class DetalleVentaInline(admin.TabularInline):
+    model = DetalleVenta
+    extra = 0
+
+@admin.register(Venta)
+class VentaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'vendedor', 'cliente_nombre', 'metodo_pago', 'total', 'fecha_venta')
+    inlines = [DetalleVentaInline]
