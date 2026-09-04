@@ -37,10 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # third party
     'crispy_forms',
     'crispy_bootstrap5',
-    # local
     'Gestion_Inventario',
     'Gestion_Ventas',
     'usuarios',
