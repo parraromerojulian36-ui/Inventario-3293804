@@ -15,7 +15,7 @@
             <p class="text-muted mb-0">Listado de personas y empresas registradas</p>
         </div>
         <!-- Botón para crear nueva Empresa / Persona -->
-        <a href="{% url 'crear_empresa' %}" class="btn btn-success">
+        <a href="{% url 'usuarios:crear_empresa' %}" class="btn btn-success">
             <i class="bi bi-plus-lg me-1"></i> Crear Empresa / Persona
         </a>
     </div>
@@ -55,7 +55,7 @@
 
                 <td>{{ emp.correo }}</td>
                 <td class="text-center">
-                    <a href="{% url 'editar_empresa' emp.id %}" class="btn btn-sm btn-outline-primary">
+                    <a href="{% url 'usuarios:editar_empresa' emp.id %}" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-pencil-fill me-1"></i> Editar
                     </a>
                 </td>
