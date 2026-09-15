@@ -8,6 +8,8 @@ from django.conf.urls.static import static
 from django.views.generic import RedirectView
 from . import views
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.home, name='home'),
@@ -15,4 +17,5 @@ urlpatterns = [
     path('Inventario/', include('Gestion_Inventario.urls')),
     path('ventas/', include('Gestion_Ventas.urls')),
     path('usuarios/', include('Usuarios.urls')),
+    path('AppTest/', include('AppTest.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
