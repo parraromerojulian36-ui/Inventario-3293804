@@ -15,4 +15,5 @@ urlpatterns = [
     path('Inventario/', include('Gestion_Inventario.urls')),
     path('ventas/', include('Gestion_Ventas.urls')),
     path('usuarios/', include('usuarios.urls')),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

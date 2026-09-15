@@ -2,7 +2,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from .models import Empresa
+from rest_framework import viewsets
+from .serializer import EmpresaSerializer, UsuarioSerializer
+from django.contrib.auth.models import User
 
+class UsuarioViewSet(viewsets.ModelViewSet):
+    queryset= User.objects.all()
+    serializer_class=UsuarioSerializer
+
+class EmpresaViewSet(viewsets.ModelViewSet):
+    queryset= Empresa.objects.all()
+    serializer_class=EmpresaSerializer
 
 def home(request):
     empresas = Empresa.objects.all()
@@ -43,7 +53,7 @@ def crear_empresa(request):
             contacto=request.POST.get('contacto'),
         )
         messages.success(request, '¡Empresa/Persona creada con éxito!')
-        return redirect(reverse('Gestion_Inventario:home_inventario'))
+        return redirect('usuarios:home')
     return render(request, 'usuarios/empresa_forms.html')
 
 
@@ -64,5 +74,5 @@ def editar_empresa(request, id_empresa):
         empresa_obj.contacto = request.POST.get('contacto')
         empresa_obj.save()
         messages.success(request, '¡Los datos de la empresa han sido actualizados con éxito!')
-        return redirect(reverse('Gestion_Inventario:home_inventario'))
+        return redirect('usuarios:home')
     return render(request, 'usuarios/empresa_forms.html', {'empresa': empresa_obj})
