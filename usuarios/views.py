@@ -6,7 +6,7 @@ from .models import Empresa
 
 def home(request):
     empresas = Empresa.objects.all()
-    return render(request, 'usuarios/home.html', {'empresas': empresas})
+    return render(request, 'Usuarios/home.html', {'empresas': empresas})
 
 
 def datos_empresa(request):

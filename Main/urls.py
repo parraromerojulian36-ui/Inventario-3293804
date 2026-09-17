@@ -19,5 +19,5 @@ urlpatterns = [
     path('docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('Inventario/', include('Gestion_Inventario.urls')),
     path('ventas/', include('Gestion_Ventas.urls')),
-    path('usuarios/', include('Usuarios.urls')),
+    path('Usuarios/', include('Usuarios.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
