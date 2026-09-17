@@ -3,6 +3,9 @@ from django.db import transaction
 from django.contrib import messages
 from .models import Venta, DetalleVenta
 from Gestion_Inventario.models import Producto
+from rest_framework import viewsets
+from .models import Venta
+from .serializer import VentaSerializer
 
 def registrar_venta(request):
     productos = Producto.objects.filter(estado='ACTIVO', stock_actual__gt=0)
@@ -55,3 +58,6 @@ def registrar_venta(request):
 def historial_ventas(request):
     ventas = Venta.objects.prefetch_related('detalles__producto').order_by('-fecha_venta')
     return render(request, 'Ventas/historial.html', {'ventas': ventas})
+class VentaViewSet(viewsets.ModelViewSet):
+    queryset = Venta.objects.all()
+    serializer_class = VentaSerializer

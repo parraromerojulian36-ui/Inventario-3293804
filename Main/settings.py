@@ -41,9 +41,15 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'Gestion_Inventario',
     'Gestion_Ventas',
-    'Usuarios',
+    'usuarios',
     'rest_framework',
+    'drf_spectacular',
+    'AppTest',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
