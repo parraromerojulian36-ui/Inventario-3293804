@@ -5,32 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Inventarios - SIGI</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Iconos Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --sigi-blue: #1e3a8a; --sigi-blue-light: #3b82f6; }
+        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .sigi-navbar { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .sigi-navbar .navbar-brand { font-weight: 700; letter-spacing: 0.05em; }
+        .card { border: none; border-radius: 1rem; }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-    <!-- Encabezado Principal SIGI -->
-    <header class="bg-primary text-white py-3 mb-4 shadow-sm">
-        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="h3 mb-0 fw-bold">SIGI</h1>
-                <small class="text-white-50">Sistema de Gestión de Inventarios - Módulo de Inventario</small>
+    <nav class="navbar navbar-expand-lg navbar-dark sigi-navbar shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-box-seam-fill me-2"></i>{{ empresa_actual.razon_social|default:"SIGI" }}
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <span class="text-white-50 small d-none d-md-inline">
+                    <i class="bi bi-person-circle me-1"></i>Administrador
+                </span>
+                <a href="{% url 'home' %}" class="btn btn-sm btn-light">
+                    <i class="bi bi-house-door me-1"></i>Inicio
+                </a>
             </div>
-            <span class="badge bg-light text-primary fs-6">Administrador Activo</span>
         </div>
-    </header>
+    </nav>
 
-    <main class="container-fluid px-4">
+    <main class="container-fluid px-4 py-4">
+
+        <div class="mb-4">
+            <h2 class="fw-bold mb-1"><i class="bi bi-box-seam text-primary me-2"></i>Módulo de Inventario</h2>
+            <p class="text-muted mb-0">Gestiona los productos, el stock y las existencias.</p>
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
         <!-- Barra de Herramientas: Botones de Acción + Filtro -->
-        <div class="card shadow-sm border-0 mb-4">
+        <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <div class="row g-3 align-items-center justify-content-between">
 
-                    <!-- Botones de Acción (Izquierda) -->
+                    <!-- Botones de Acción -->
                     <div class="col-12 col-lg-auto d-flex flex-wrap gap-2">
                         <button type="button" class="btn btn-success d-flex align-items-center gap-2">
                             <i class="bi bi-pencil-square"></i> Ingreso Manual
@@ -43,17 +68,17 @@
                         </button>
                     </div>
 
-                    <!-- Panel de Filtro y Búsqueda (Derecha) -->
+                    <!-- Panel de Filtro y Búsqueda -->
                     <div class="col-12 col-lg-6">
                         <form class="d-flex gap-2" method="GET">
                             <select class="form-select w-auto" name="criterio_filtro">
                                 <option value="todos" selected>Filtrar por...</option>
-                                <option value="factura">N° Factura</option>
-                                <option value="cliente">Cliente</option>
-                                <option value="fecha">Fecha</option>
+                                <option value="codigo">Código</option>
+                                <option value="nombre">Nombre</option>
+                                <option value="categoria">Categoría</option>
                             </select>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="buscar" placeholder="Buscar venta...">
+                                <input type="text" class="form-control" name="buscar" placeholder="Buscar producto...">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="bi bi-search"></i> Buscar
                                 </button>
@@ -65,17 +90,54 @@
             </div>
         </div>
 
-        <!-- Área de Contenido Principal / Tabla de Registro -->
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center py-5 text-muted">
-                <i class="bi bi-cart-check display-1"></i>
-                <p class="mt-3 fs-5">listo para registrar transacciones de Productos.</p>
+        <!-- Tabla de Productos -->
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Código</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th class="text-end">Precio</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-center pe-4">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in productos %}
+                        <tr>
+                            <td class="ps-4 text-muted">{{ p.codigo_barras }}</td>
+                            <td class="fw-semibold">{{ p.nombre_producto }}</td>
+                            <td class="text-muted">{{ p.categoria|default:"-" }}</td>
+                            <td class="text-end">${{ p.precio_venta }}</td>
+                            <td class="text-center">{{ p.stock_actual }}</td>
+                            <td class="text-center pe-4">
+                                <span class="badge {% if p.estado == 'ACTIVO' %}bg-success{% else %}bg-secondary{% endif %}">
+                                    {{ p.get_estado_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="bi bi-box display-6 d-block mb-2"></i>
+                                No hay productos registrados aún.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
+
     </main>
 
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <footer class="text-center text-muted small py-4">
+        &copy; 2026 SIGI - Sistema Integral de Gestión de Inventarios
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 
 </html>

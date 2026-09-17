@@ -1,63 +1,116 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Ventas - SIGI</title>
+    <title>Gestión de Ventas - SIGI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root { --sigi-blue: #1e3a8a; --sigi-blue-light: #3b82f6; }
+        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .sigi-navbar { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .sigi-navbar .navbar-brand { font-weight: 700; letter-spacing: 0.05em; }
+        .card { border: none; border-radius: 1rem; }
+        .btn-success { background-color: #10b981; border-color: #10b981; }
+        .btn-success:hover { background-color: #059669; border-color: #059669; }
+    </style>
 </head>
+
 <body>
 
-<div class="container mt-4">
-    <h2 class="mb-3"><i class="bi bi-cart-check"></i> Registrar Nueva Venta</h2>
-
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    {% endfor %}
-    {% endif %}
-
-    <div class="card shadow-sm p-4">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label font-weight-bold">Seleccionar Producto</label>
-                    <select name="producto_id" class="form-select" required>
-                        <option value="">-- Buscar producto --</option>
-                        {% for prod in productos %}
-                        <option value="{{ prod.id }}">
-                            {{ prod.nombre_producto }} | Stock: {{ prod.stock_actual }} | ${{ prod.precio_venta }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Cantidad</label>
-                    <input type="number" name="cantidad" class="form-control" value="1" min="1" required>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Método de Pago</label>
-                    <select name="metodo_pago" class="form-select">
-                        <option value="EFECTIVO">Efectivo</option>
-                        <option value="TARJETA">Tarjeta</option>
-                        <option value="TRANSFERENCIA">Transferencia / PSE</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Nombre del Cliente</label>
-                    <input type="text" name="cliente_nombre" class="form-control" placeholder="Cliente General">
-                </div>
-                <div class="col-md-6 d-flex align-items-end">
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="bi bi-check-circle"></i> Procesar Venta y Descargar Stock
-                    </button>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark sigi-navbar shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="bi bi-box-seam-fill me-2"></i>{{ empresa_actual.razon_social|default:"SIGI" }}
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-2">
+                <a href="{% url 'Gestion_Ventas:historial_ventas' %}" class="btn btn-sm btn-light">
+                    <i class="bi bi-receipt me-1"></i>Historial
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light">
+                    <i class="bi bi-house-door me-1"></i>Inicio
+                </a>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+
+        <div class="mb-4">
+            <h2 class="fw-bold mb-1"><i class="bi bi-cart-check text-primary me-2"></i>Punto de Venta</h2>
+            <p class="text-muted mb-0">Registra una venta y descuenta el stock automáticamente.</p>
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi {% if message.tags == 'success' %}bi-check-circle{% else %}bi-exclamation-triangle{% endif %} me-1"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="row g-3">
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Seleccionar Producto</label>
+                            <select name="producto_id" class="form-select" required>
+                                <option value="">-- Buscar producto --</option>
+                                {% for prod in productos %}
+                                <option value="{{ prod.id }}">
+                                    {{ prod.nombre_producto }} | Stock: {{ prod.stock_actual }} | ${{ prod.precio_venta }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" name="cantidad" class="form-control" value="1" min="1" required>
+                        </div>
+
+                        <div class="col-6 col-md-3">
+                            <label class="form-label">Método de Pago</label>
+                            <select name="metodo_pago" class="form-select">
+                                <option value="EFECTIVO">Efectivo</option>
+                                <option value="TARJETA">Tarjeta</option>
+                                <option value="TRANSFERENCIA">Transferencia / PSE</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Nombre del Cliente</label>
+                            <input type="text" name="cliente_nombre" class="form-control" placeholder="Cliente General">
+                        </div>
+
+                        <div class="col-12 d-flex flex-column flex-md-row justify-content-md-end gap-2 mt-4">
+                            <a href="{% url 'home' %}" class="btn btn-light border px-4">
+                                <i class="bi bi-x-lg me-1"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="bi bi-check-circle me-1"></i>Procesar Venta y Descargar Stock
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-center text-muted small py-4">
+        &copy; 2026 SIGI - Sistema Integral de Gestión de Inventarios
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
+
 </html>
