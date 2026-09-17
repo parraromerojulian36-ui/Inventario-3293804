@@ -54,7 +54,7 @@ def editar_producto(request, sku_interno):
         messages.success(request, '¡Los datos del Producto han sido actualizados con éxito!')
         return redirect('Gestion_Inventario:home_inventario')
         
-    return render(request, 'usuarios/empresa_forms.html', {'producto': producto_obj})
+    return render(request, 'Usuarios/empresa_forms.html', {'producto': producto_obj})
 
 def eliminar_producto(request, sku_interno):
     producto_obj = get_object_or_404(Producto, sku_interno=sku_interno)

@@ -25,7 +25,7 @@ def datos_empresa(request):
         )
         messages.success(request, '¡Empresa/Persona creada con éxito!')
         return redirect('home')
-    return render(request, 'usuarios/empresa_forms.html')
+    return render(request, 'Usuarios/empresa_forms.html')
 
 
 def crear_empresa(request):
@@ -44,7 +44,7 @@ def crear_empresa(request):
         )
         messages.success(request, '¡Empresa/Persona creada con éxito!')
         return redirect('home')
-    return render(request, 'usuarios/empresa_forms.html')
+    return render(request, 'Usuarios/empresa_forms.html')
 
 
 def editar_empresa(request, id_empresa):
@@ -65,4 +65,4 @@ def editar_empresa(request, id_empresa):
         empresa_obj.save()
         messages.success(request, '¡Los datos de la empresa han sido actualizados con éxito!')
         return redirect('home')
-    return render(request, 'usuarios/empresa_forms.html', {'empresa': empresa_obj})
+    return render(request, 'Usuarios/empresa_forms.html', {'empresa': empresa_obj})
