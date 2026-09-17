@@ -24,7 +24,7 @@ def datos_empresa(request):
             contacto=request.POST.get('contacto'),
         )
         messages.success(request, '¡Empresa/Persona creada con éxito!')
-        return redirect(reverse('Gestion_Inventario:home_inventario'))
+        return redirect('home')
     return render(request, 'usuarios/empresa_forms.html')
 
 
@@ -43,7 +43,7 @@ def crear_empresa(request):
             contacto=request.POST.get('contacto'),
         )
         messages.success(request, '¡Empresa/Persona creada con éxito!')
-        return redirect(reverse('Gestion_Inventario:home_inventario'))
+        return redirect('home')
     return render(request, 'usuarios/empresa_forms.html')
 
 
@@ -64,5 +64,5 @@ def editar_empresa(request, id_empresa):
         empresa_obj.contacto = request.POST.get('contacto')
         empresa_obj.save()
         messages.success(request, '¡Los datos de la empresa han sido actualizados con éxito!')
-        return redirect(reverse('Gestion_Inventario:home_inventario'))
+        return redirect('home')
     return render(request, 'usuarios/empresa_forms.html', {'empresa': empresa_obj})
