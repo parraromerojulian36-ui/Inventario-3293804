@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos SIGI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Productos SIGI</h1>
+        <p>Api Rest Productos</p>
+    </header>
+
+    <main>
+
+        <table id="tabla">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo"></tbody>
+        </table>
+    </main>
+
+    <footer>
+        <small>Api consultada de http://127.0.0.1:8000/Inventario/api/ProductoApi/</small>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
